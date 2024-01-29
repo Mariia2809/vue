@@ -17,13 +17,13 @@
          <div class="product">
 
             <div class="product-image">
-               <img alt="#" v-bind:src="image"/>
+               <img v-bind:src="image" v-bind:alt="altText" />
             </div>
 
             <div class="product-info">
                <h1>{{ product }}</h1>
             </div>
-
+            <a v-bind:href="link"> More products like this. </a>
          </div>
 </div>
 </body>
