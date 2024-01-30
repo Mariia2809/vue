@@ -40,6 +40,7 @@ Vue.component('product-tabs', {
             required: false
         }
     },
+
     template: `
      <div>   
        <ul>
@@ -63,7 +64,7 @@ Vue.component('product-tabs', {
              <product-review></product-review>
            </div>
            <div v-show="selectedTab === 'Shipping'">
-              <shipping-tab :premium="premium"></shipping-tab>
+              <shipping-tab :premium="premium" ></shipping-tab>
            </div>
            <div v-show="selectedTab === 'Details'">
               <details-tab :details="details"></details-tab>
@@ -165,7 +166,7 @@ Vue.component('product', {
         }
     },
     template: `
-   <div class="product">
+   <div class="product" xmlns="http://www.w3.org/1999/html">
     <div class="product-image">
            <img :src="image" :alt="altText"/>
        </div>
@@ -185,7 +186,20 @@ Vue.component('product', {
                    :style="{ backgroundColor:variant.variantColor }"
                    @mouseover="updateProduct(index)"
            ></div>
-           <button
+           <form class="sizes-form" @submit.prevent="addToCart"> <!--  обёртка формы-->
+         <!--Варианты размеров через список-->
+         <p>
+           <label for="sizes">Размеры:</label>
+           <select id="sizes" :disabled="!inStock" v-model.lazy="sizes" required="true">
+             <option>S</option>
+             <option>M</option>
+             <option>L</option>
+             <option>XL</option>
+             <option>XXL</option>
+             <option>XXXL</option>
+           </select>
+         </p>
+            <button
                    v-on:click="addToCart"
                    :disabled="!inStock"
                    :class="{ disabledButton: !inStock }"
@@ -197,6 +211,8 @@ Vue.component('product', {
        <div>
             <product-tabs :reviews="reviews"></product-tabs>
         </div>
+       </div>
+     </form>
        </div>
    </div>
  `,
@@ -219,9 +235,10 @@ Vue.component('product', {
                     variantId: 2235,
                     variantColor: 'blue',
                     variantImage: "./assets/vmSocks-blue-onWhite.jpg",
-                    variantQuantity: 0
+                    variantQuantity: 0,
                 }
             ],
+
         }
     },
     methods: {
