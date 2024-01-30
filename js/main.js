@@ -1,3 +1,16 @@
+Vue.component('product-tabs', {
+    template: `
+   <div>
+     <span class="tab" v-for="(tab, index) in tabs" :key="index">{{ tab }}</span>
+   </div>
+ `,
+    data() {
+        return {
+            tabs: ['Reviews', 'Make a Review']
+        }
+    }
+})
+
 Vue.component('product-review', {
     template: `
    <form class="review-form" @submit.prevent="onSubmit">
@@ -48,20 +61,24 @@ Vue.component('product-review', {
     },
     methods: {
         onSubmit() {
-            if(this.name && this.review && this.rating) {
+            this.errors = [];
+            if (!this.name) this.errors.push("Name required.");
+            if (!this.review) this.errors.push("Review required.");
+            if (!this.rating) this.errors.push("Rating required.");
+            if (!this.recommend) this.errors.push("Recommendation required.");
+
+            if (this.errors.length === 0) {
                 let productReview = {
                     name: this.name,
                     review: this.review,
-                    rating: this.rating
+                    rating: this.rating,
+                    recommend: this.recommend
                 }
-                this.$emit('review-submitted', productReview)
-                this.name = null
-                this.review = null
-                this.rating = null
-            } else {
-                if(!this.name) this.errors.push("Name required.")
-                if(!this.review) this.errors.push("Review required.")
-                if(!this.rating) this.errors.push("Rating required.")
+                this.$emit('review-submitted', productReview);
+                this.name = null;
+                this.review = null;
+                this.rating = null;
+                this.recommend = null;
             }
         },
         addReview(productReview) {
